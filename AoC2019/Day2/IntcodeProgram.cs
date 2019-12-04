@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace AoC2019
 {
@@ -9,21 +6,23 @@ namespace AoC2019
     {
         public IntcodeProgram(List<int> memory)
         {
-            initialMemory = memory;
-            CurrentMemory = memory;
+            initialMemory = new List<int>(memory);
+            CurrentMemory = new List<int>(memory);
         }
 
         public void Reset()
         {
-            CurrentMemory = initialMemory;
+            CurrentMemory.Clear();
+            initialMemory.ForEach(x => CurrentMemory.Add(x));
         }
 
         public List<int> CurrentMemory { get; set; }
-        public int Verb {
+
+        public int Noun {
             get => CurrentMemory[1];
             set => CurrentMemory[1] = value;
         }
-        public int Noun
+        public int Verb
         {
             get => CurrentMemory[2];
             set => CurrentMemory[2] = value;
@@ -33,7 +32,7 @@ namespace AoC2019
         {
             for (var i = 0; i < CurrentMemory.Count; i += 4)
             {
-                var opcode = CurrentMemory[i]; 
+                var opcode = CurrentMemory[i];
                 
                 if (opcode == 99)
                 {
@@ -68,6 +67,6 @@ namespace AoC2019
             CurrentMemory[indexToChange] = CurrentMemory[firstIndex] * CurrentMemory[secondIndex];
         }
 
-        private List<int> initialMemory { get; }
+        private readonly List<int> initialMemory;
     }
 }

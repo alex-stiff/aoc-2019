@@ -1,7 +1,9 @@
 using NUnit.Framework;
 using AoC2019;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace TestModule
+namespace TestIntcode
 {
     public class Tests
     {
@@ -10,35 +12,16 @@ namespace TestModule
         {
         }
 
-        [TestCase(12, 2)]
-        [TestCase(14, 2)]
-        [TestCase(1969, 654)]
-        [TestCase(100756, 33583)]
-        public void Test_module_mass_calculation(int mass, double expectedFuelRequired)
+        [Test]
+        public void Test_basic_program()
         {
-            var module = new Module
-            {
-                Mass = mass
-            };
+            var instructions = new List<int> { 1, 1, 1, 4, 99, 5, 6, 0, 99 };
+            var program = new IntcodeProgram(instructions);
+            var expectedOutput = new List<int> { 30, 1, 1, 4, 2, 5, 6, 0, 99 };
 
-            var actualFuelRequired = module.CalculateBasicFuelRequirement();
+            program.Run();
 
-            Assert.AreEqual(expectedFuelRequired, actualFuelRequired);
-        }
-
-        [TestCase(12, 2)]
-        [TestCase(14, 2)]
-        [TestCase(1969, 966)]
-        public void Test_module_new_mass_calculation(int mass, double expectedFuelRequired)
-        {
-            var module = new Module
-            {
-                Mass = mass
-            };
-
-            var actualFuelRequired = module.CalculateAdvancedFuelRequirement();
-
-            Assert.AreEqual(expectedFuelRequired, actualFuelRequired);
+            CollectionAssert.AreEqual(expectedOutput, program.CurrentMemory);
         }
     }
 }
